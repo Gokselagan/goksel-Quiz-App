@@ -1,0 +1,96 @@
+.quiz-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+
+.question-container {
+background-color: #fff;
+margin-bottom: 10px;
+width: 80%;
+border-radius: 9px;
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+}
+
+.question {
+    font-weight: 800;
+}
+
+.options {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+}
+
+.checkbox-options {
+    display: flex;
+    flex-direction: row;
+    gap: 80px;
+}
+
+.checkbox-correct-options{
+    display: flex;
+    flex-direction: column;
+    margin-top: 0px;
+    align-items: flex-start;
+}
+
+.correct {
+    color: #008000;
+    font-size: 1.3rem;
+    transition: .5s;
+    font-weight: 500px;
+}
+
+.wrong {
+    color: #ff0000;
+    font-size: .9rem;
+    transition: .5s;
+}
+
+label {
+    cursor: pointer;
+}
+
+.submit-btn {
+    padding: 10px 20px;
+    border: none;
+    font-size: 16px;
+    background-color: #008000;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 600;
+    letter-spacing: 1px;
+    border-radius: 9px;
+}
+
+@keyframes slideInFromLeft {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+.lesson-links{
+    margin-bottom: 10px;
+    background-color: #f00;
+    border-radius: 9px;
+    width: 80%;
+    padding-bottom: 8px;
+    animation: slideInFromLeft 0.5s ease-out;
+    font-size: 20px;
+}
+
+.lesson-links > a {
+    text-decoration: none;
+    color: #fff;
+}
+
