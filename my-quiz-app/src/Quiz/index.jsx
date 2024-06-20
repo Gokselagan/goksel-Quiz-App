@@ -1,161 +1,159 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Data } from "./Data";
 import "./styles.css";
 
 export const QuizApp = () => {
-
-    const [questionInput1, setQuestionInput1] = useState();
-    const [questionInput2, setQuestionInput2] = useState();
-    const [questionInput3, setQuestionInput3] = useState("");
-    const [questionInput4, setQuestionInput4] = useState([]);
-
-    const [isCorrect1, setIsCorrect1] = useState(false);
-    const [isCorrect2, setIsCorrect2] = useState(false);
-    const [isCorrect3, setIsCorrect3] = useState(false);
-    const [isCorrect4, setIsCorrect4] = useState(false);
-
-    const [start, setStart] = useState(false);
+    const [questions, setQuestions] = useState(Data);
+    const [isCompleted, setIsCompleted] = useState(false);
 
     const handleSubmitForm = (e) => {
         e.preventDefault();
-        setStart(true);
-        setIsCorrect1(questionInput1 === Data[0].correctAnswer);
-        setIsCorrect2(questionInput2 === Data[1].correctAnswer);
-        setIsCorrect3(questionInput3 === Data[2].correctAnswer);
-        setIsCorrect4(questionInput4.length === Data[3].correctAnswer.length);
-    }
-
-    const handleSelectedInput1 = (option) => {
-        setQuestionInput1(option);
+        setIsCompleted(true);
+        const updatedQuestions = questions.map((question) => {
+            if (question.type === "single") {
+                return {
+                    ...question,
+                    isCorrect: question.input === question.correctAnswer
+                };
+            } else if (question.type === "multiple") {
+                return {
+                    ...question,
+                    isCorrect: arraysEqual(question.input.sort(), question.correctAnswer.sort())
+                };
+            } else if (question.type === "text") {
+                return {
+                    ...question,
+                    isCorrect: question.input.trim() === question.correctAnswer
+                };
+            } else {
+                return question;
+            }
+        });
+        setQuestions(updatedQuestions);
     };
-    const handleSelectedInput2 = (option) => {
-        setQuestionInput2(option);
+
+    const handleInputChange = (index, value) => {
+        const updatedQuestions = [...questions];
+        updatedQuestions[index].input = value;
+        setQuestions(updatedQuestions);
     };
 
-    const handleSelectedInput4 = (option) => {
-        setQuestionInput4([...questionInput4, option])
-    }
+    const handleSelectedInput = (questionIndex, option) => {
+        const updatedQuestions = [...questions];
+        const question = updatedQuestions[questionIndex];
+        const currentIndex = question.input.indexOf(option);
+
+        if (currentIndex === -1) {
+            question.input.push(option);
+        } else {
+            question.input.splice(currentIndex, 1);
+        }
+        setQuestions(updatedQuestions);
+    };
+
+    const arraysEqual = (arr1, arr2) => {
+        if (arr1.length !== arr2.length) return false;
+        for (let i = 0; i < arr1.length; i++) {
+            if (arr1[i] !== arr2[i]) return false;
+        }
+        return true;
+    };
 
     return (
         <div className="quiz-form-container">
             <form className="quiz-form" onSubmit={handleSubmitForm}>
-                <div className="question-container">
-                    <p className="question">{Data[0].question}</p>
+                {questions.map((question, index) => (
+                    <div key={question.id} className="question-container">
+                        <p className="question">{question.question}</p>
 
-                    <div className="options">
-                        {Data[0].options.map(
-                            (option1, index) =>
-                            (<label
-                                key={index}
-                                className={questionInput1 === option1 && start
-                                    ? isCorrect1
-                                        ? "correct"
-                                        : "wrong"
-                                    : option1 === Data[0].correctAnswer && start && !isCorrect1
-                                        ? "correct"
-                                        : ""}>
-                                <input
-                                    type="radio"
-                                    value={option1}
-                                    checked={questionInput1 === option1}
-                                    onChange={() => handleSelectedInput1(option1)}
-                                />{option1}
-                            </label>)
-                        )}
-                    </div>
-                </div>
-                {!isCorrect1 && start ? <div className="lesson-links">You need to study <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures" target="_blank">JavaScript data types</a> more.</div> : null}
-
-                <div className="question-container">
-                    <p className="question">{Data[1].question}</p>
-
-                    <div className="options">
-                        {Data[1].options.map(
-                            (option2, index) =>
-                            (<label
-                                key={index}
-                                className={questionInput2 === option2 && start
-                                    ? isCorrect2
-                                        ? "correct"
-                                        : "wrong"
-                                    : option2 === Data[1].correctAnswer && start && !isCorrect2
-                                        ? "correct"
-                                        : ""}>
-                                <input
-                                    type="radio"
-                                    value={option2}
-                                    checked={questionInput2 === option2}
-                                    onChange={() => handleSelectedInput2(option2)}
-                                />{option2}
-                            </label>)
-                        )}
-                    </div>
-                </div>
-                {!isCorrect2 && start ? <div className="lesson-links">You need to study <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element" target="_blank">HTML elements reference</a> more.</div> : null}
-
-                <div className="question-container">
-                    <p className="question">{Data[2].question}</p>
-
-                    <div className="options">
-                        {<>
-                            <p>const cars = ["Mercedes", "Volvo", Audi]</p>
-                            <label>
-                                let X =
-                                <input
-                                    type="text"
-                                    className={start ? (isCorrect3 ? "correct" : "wrong") : ""}
-                                    onChange={(e) => setQuestionInput3(e.target.value)}
-                                />
-                            </label>
-                            {!isCorrect3 && start ? <span className="correct">Correct Answer is :cars[1]</span> : null}
-                        </>}
-                    </div>
-                </div>
-                {!isCorrect3 && start ? <div className="lesson-links">You need to study <a href="https://www.w3schools.com/js/js_arrays.asp" target="_blank">JavaScript Arrays</a> more.</div> : null}
-
-                <div className="question-container">
-                    <p className="question">{Data[3].question}</p>
-
-                    <div className="checkbox-options">
-                        <div className="options">
-                            {Data[3].options.map((option4, index) => (
-                                <label
-                                    key={index}
-                                    className={start ? (isCorrect4 ? "correct" : "wrong") : ""}
-                                >
+                        {question.type === "text" && (
+                            <div className="options">
+                                <p>const cars = ["Mercedes", "Volvo", "Audi"]</p>
+                                <label>
                                     <input
-                                        type="checkbox"
-                                        onChange={() => handleSelectedInput4(option4)}
-                                        checked={questionInput4.includes(option4)}
+                                        type="text"
+                                        value={question.input || ""}
+                                        onChange={(e) =>
+                                            handleInputChange(index, e.target.value)
+                                        }
+                                        placeholder="Write your answer here"
+                                        className={
+                                            isCompleted
+                                                ? question.isCorrect
+                                                    ? "correct"
+                                                    : "wrong"
+                                                : ""
+                                        }
                                     />
-                                    {option4}
                                 </label>
-                            ))}
-                        </div>
-                        <div className="options">
-                            {!isCorrect4 && start ?
-                                <p className="checkbox-correct-options">Correct Answers
-                                    {Data[3].options.map((option4, index) => (
+                            </div>
+                        )}
 
-                                        <label
-                                            key={index}
-                                            className="correct"
-                                        >
-                                            {option4}
-                                        </label>
+                        {question.type !== "text" && (
+                            <div className="options">
+                                {question.options.map((option, optIndex) => (
+                                    <label
+                                        key={optIndex}
+                                        className={
+                                            (question.type === "single" && question.input === option && isCompleted)
+                                                ? question.isCorrect
+                                                    ? "correct"
+                                                    : "wrong"
+                                                : (question.type === "single" && option === question.correctAnswer && isCompleted && !question.isCorrect)
+                                                    ? "correct"
+                                                    : (question.type === "multiple" && question.input.includes(option) && isCompleted)
+                                                        ? question.isCorrect
+                                                            ? "correct"
+                                                            : "wrong"
+                                                        : (question.type === "multiple" && option === question.correctAnswer && isCompleted && !question.isCorrect)
+                                                            ? "correct"
+                                                            : ""
+                                        }
+                                    >
+                                        {question.type === "single" ? (
+                                            <input
+                                                type="radio"
+                                                value={option}
+                                                checked={question.input === option}
+                                                onChange={() =>
+                                                    handleInputChange(index, option)
+                                                }
+                                            />
+                                        ) : question.type === "multiple" ? (
+                                            <input
+                                                type="checkbox"
+                                                onChange={() =>
+                                                    handleSelectedInput(index, option)
+                                                }
+                                                checked={question.input.includes(option)}
+                                                disabled={isCompleted}
+                                            />
+                                        ) : null}
+                                        {option}
+                                    </label>
+                                ))}
+                            </div>
+                        )}
 
-                                    ))}
-                                </p>
-                                : null}
-                        </div>
+                        {!question.isCorrect && isCompleted ? (
+                            <div className="lesson-links">
+                                You need to study{" "}
+                                <a
+                                    href={question.link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    {question.linkDescription}
+                                </a>{" "}
+                                more.
+                            </div>
+                        ) : null}
                     </div>
-                </div>
-                {!isCorrect4 && start ? <div className="lesson-links">You need to study <a href="https://www.w3schools.com/cssref/pr_class_position.php" target="_blank">CSS position Property</a> more.</div> : null}
-
-                <button type="submit" className="submit-btn">Check Your Answer</button>
+                ))}
+                <button type="submit" className="submit-btn">
+                    Check Your Answers
+                </button>
             </form>
         </div>
-    )
-}
-
-
+    );
+};

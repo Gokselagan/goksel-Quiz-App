@@ -6,7 +6,6 @@
     font-weight: 500;
 }
 
-
 .question-container {
 background-color: #fff;
 margin-bottom: 10px;
@@ -26,19 +25,6 @@ align-items: flex-start;
     flex-direction: column;
     align-items: flex-start;
     gap: 5px;
-}
-
-.checkbox-options {
-    display: flex;
-    flex-direction: row;
-    gap: 80px;
-}
-
-.checkbox-correct-options{
-    display: flex;
-    flex-direction: column;
-    margin-top: 0px;
-    align-items: flex-start;
 }
 
 .correct {
