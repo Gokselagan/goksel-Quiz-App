@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Data } from "./Data";
 import "./styles.css";
+import { Box, Button, Checkbox, FormControlLabel, Link, Radio, RadioGroup, TextField, Typography } from "@mui/material";
 
 export const QuizApp = () => {
     const [questions, setQuestions] = useState(Data);
@@ -59,101 +60,106 @@ export const QuizApp = () => {
         return true;
     };
 
+    function getClassName(question, option, isCompleted) {
+        if (!isCompleted) {
+            return "";
+        }
+
+        const isUserAnswerCorrect = question.isCorrect;
+        const didUserSelectOption = question.input === option || (question.type === "multiple" && question.input.includes(option));
+        const isOptionCorrectAnswer = option === question.correctAnswer;
+
+        if (didUserSelectOption) {
+            return isUserAnswerCorrect ? "correct" : "wrong";
+        } else if (isOptionCorrectAnswer && isUserAnswerCorrect) {
+            return "correct";
+        }
+        return "";
+    }
+
     return (
-        <div className="quiz-form-container">
-            <form className="quiz-form" onSubmit={handleSubmitForm}>
-                {questions.map((question, index) => (
-                    <div key={question.id} className="question-container">
-                        <p className="question">{question.question}</p>
+        <Box component="form" onSubmit={handleSubmitForm}
+            sx={{ p: 2 }}
+        >
+            {questions.map((question, index) => (
+                <Box key={question.id} mb={2}>
+                    <Typography sx={{ fontWeight: "600" }}>{question.question}</Typography>
 
-                        {question.type === "text" && (
-                            <div className="options">
-                                <p>const cars = ["Mercedes", "Volvo", "Audi"]</p>
-                                <label>
-                                    <input
-                                        type="text"
-                                        value={question.input || ""}
-                                        onChange={(e) =>
-                                            handleInputChange(index, e.target.value)
-                                        }
-                                        placeholder="Write your answer here"
-                                        className={
-                                            isCompleted
-                                                ? question.isCorrect
-                                                    ? "correct"
-                                                    : "wrong"
-                                                : ""
-                                        }
-                                    />
-                                </label>
-                            </div>
-                        )}
+                    {question.type === "text" && (
+                        <Box>
+                            <TextField
+                                value={question.input || ""}
+                                onChange={(e) => handleInputChange(index, e.target.value)}
+                                placeholder="Write your answer here"
+                                InputProps={{
+                                    style: {
+                                        color: isCompleted ? question.isCorrect ? "#008000" : "#f00" : "", height: "40px"
+                                    }
+                                }}
+                            />
+                        </Box>
+                    )}
 
-                        {question.type !== "text" && (
-                            <div className="options">
-                                {question.options.map((option, optIndex) => (
-                                    <label
+                    {question.type !== "text" && (
+                        <Box sx={{ display: "flex", flexDirection: "row", gap: "9px" }}>
+                            {question.type === "single" ? (
+                                <RadioGroup
+                                    value={question.input}
+                                    onChange={(e) => handleInputChange(index, e.target.value)}
+                                    sx={{ display: "flex", flexDirection: "row" }}
+                                >
+                                    {question.options.map((option, optIndex) => (
+                                        <FormControlLabel
+                                            key={optIndex}
+                                            value={option}
+                                            control={<Radio />}
+                                            label={option}
+                                            className={getClassName(question, option, isCompleted)}
+                                        />
+                                    ))}
+                                </RadioGroup>
+                            ) : question.type === "multiple" ? (
+                                question.options.map((option, optIndex) => (
+                                    <FormControlLabel
                                         key={optIndex}
-                                        className={
-                                            (question.type === "single" && question.input === option && isCompleted)
-                                                ? question.isCorrect
-                                                    ? "correct"
-                                                    : "wrong"
-                                                : (question.type === "single" && option === question.correctAnswer && isCompleted && !question.isCorrect)
-                                                    ? "correct"
-                                                    : (question.type === "multiple" && question.input.includes(option) && isCompleted)
-                                                        ? question.isCorrect
-                                                            ? "correct"
-                                                            : "wrong"
-                                                        : (question.type === "multiple" && option === question.correctAnswer && isCompleted && !question.isCorrect)
-                                                            ? "correct"
-                                                            : ""
-                                        }
-                                    >
-                                        {question.type === "single" ? (
-                                            <input
-                                                type="radio"
-                                                value={option}
-                                                checked={question.input === option}
-                                                onChange={() =>
-                                                    handleInputChange(index, option)
-                                                }
-                                            />
-                                        ) : question.type === "multiple" ? (
-                                            <input
-                                                type="checkbox"
-                                                onChange={() =>
-                                                    handleSelectedInput(index, option)
-                                                }
+                                        control={
+                                            <Checkbox
                                                 checked={question.input.includes(option)}
+                                                onChange={() => handleSelectedInput(index, option)}
                                                 disabled={isCompleted}
                                             />
-                                        ) : null}
-                                        {option}
-                                    </label>
-                                ))}
-                            </div>
-                        )}
+                                        }
+                                        label={option}
+                                    />
+                                ))
+                            ) : null}
 
-                        {!question.isCorrect && isCompleted ? (
-                            <div className="lesson-links">
-                                You need to study{" "}
-                                <a
-                                    href={question.link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    {question.linkDescription}
-                                </a>{" "}
-                                more.
-                            </div>
-                        ) : null}
-                    </div>
-                ))}
-                <button type="submit" className="submit-btn">
+                        </Box>
+                    )}
+
+                    {!question.isCorrect && isCompleted && (
+                        <Box className="lesson-links">
+                            You need to study{" "}
+                            <Link
+                                href={question.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                {question.linkDescription}
+                            </Link>{" "}
+                            more.
+                        </Box>
+                    )}
+                </Box>
+            ))}
+
+            <Box sx={{ display: "flex", justifyContent: "center", mt:2 }}>
+                <Button type="submit" variant="contained" color="primary"
+                >
                     Check Your Answers
-                </button>
-            </form>
-        </div>
+                </Button>
+            </Box>
+
+        </Box>
     );
 };

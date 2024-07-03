@@ -23,7 +23,7 @@ export const Data = [
     },
     {
         id: 3,
-        question: `3. Get the value "Volvo" from the cars array.`, 
+        question: `3. Get the value "Volvo" from the cars array. "const cars = ["Mercedes", "Volvo", "Audi"]"`, 
         correctAnswer: `cars[1]`,
         type: "text",
         input: "",
