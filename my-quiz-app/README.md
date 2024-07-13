@@ -1,6 +1,6 @@
 ## Quiz Application
 
-This project is a React-based quiz application where users can test their knowledge with various types of questions.
+This project is a React-based quiz application where users can test their knowledge with various questions.
 
 ### Features
 
@@ -49,6 +49,9 @@ Review: For incorrect answers, click on study links provided for further learnin
 
 Screenshots
 
+MAIN PAGE
+
+<img width="1440" alt="Screenshot 2024-07-13 at 18 23 49" src="https://github.com/user-attachments/assets/fb9f76ea-a3dc-40f3-a4cc-2627a021f7e6">
 
 
 Contributing
