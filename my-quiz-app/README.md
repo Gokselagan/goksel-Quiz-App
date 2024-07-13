@@ -1,59 +1,55 @@
-QUIZ-APP
+## Quiz Application
 
-About the project
+This project is a React-based quiz application where users can test their knowledge with various types of questions.
 
-    This project is a web application where users can test their knowledge by answering various quiz questions
+### Features
 
-Getting Started
+- **User Interaction:** Answer questions interactively with options or text inputs.
 
-    To clone this project to your local environment, follow these steps:
+- **Validation:** Receive immediate feedback on correct and incorrect answers.
 
-    1. Clone the project: 
+- **Study Links:** Access additional resources based on quiz results.
 
-        git clone https://github.com/Gokselagan/QuizApp.git
+### Technologies Used
 
-    2. Navigate to the project directory:
+- **React.js:** Frontend library for building user interfaces.
 
-        cd my-quiz-app
+- **Material-UI:** React components for faster and easier web development.
 
-    3. Install dependencies:
+- **State Management:** Utilizes React's useState hook for managing question data.
 
-        npm install
+- **Form Handling:** React Hook Form for efficient form validation and submission handling.
 
-  OR
+### Installation
 
-    To start using the Quiz App, visit the deployed version hosted on Vercel:
-    
-     https://quiz-a09530egq-goksels-projects-d119d763.vercel.app
+To run this project locally, follow these steps:
+
+1. Clone the repository:
+   
+   git clone https://github.com/Gokselagan/QuizApp.git
+
+   cd QuizApp
+
+Install dependencies:
+npm install
+
+Start the development server:
+
+npm start
+
+Open your browser and go to http://localhost:3000 to view the app.
 
 Usage
 
-    To run the project on your local server:
+Answer Questions: Choose options or input answers in text fields.
 
-        npm start
-        
-        Open http://localhost:3000 in your browser to view the application.
+Submit: Click "Check Your Answers" to see results and feedback.
 
-Technologies Used
+Review: For incorrect answers, click on study links provided for further learning.
 
-    . React
-    . Material-UI
-
-Project Structure
-
-    project-directory/
-  ├── public/
-  │   ├── index.html
-  │   └── ...
-  ├── src/
-  │   ├── Quiz
-  │   │   └── Data
-  │   │         └──index.js
-  │   │   └──index.js 
-  │   ├── App.js
-  │   └── index.js
-  ├── package.json
-  └── README.md
+Screenshots
 
 
 
+Contributing
+Contributions are welcome! Please create an issue or submit a pull request with any suggestions or improvements.
